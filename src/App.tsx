@@ -27,12 +27,13 @@ const LogoBoxStyle = {
 function App() {
   const [mainView, setMainView] = useState(MainView.LOGO);
   const [submitiedDiamond, setSubmitiedDiamond] = useState({ id: "", price: -1 });
+
   const calcFormAfterSubmitCallback = useCallback(
     (diamondId: string, price: number) => {
       setSubmitiedDiamond({ id: diamondId, price })
-    },[]
+    }, []
   )
-  
+
   useEffect(() => {
     setTimeout(() => {
       setMainView(MainView.CALC_PRICE);
@@ -65,28 +66,40 @@ function App() {
         <div className='PriceResult'>
           <Box sx={LogoBoxStyle}>
             <div className='PriceBox'>
-              <div className='Container'>
+              <div className='PriceLabelAndValue'>
                 <div className='PriceLabel'>Estimated Price</div>
                 <div className='PriceValue'>{submitiedDiamond.price + "$"}</div>
                 <DiamondIcon color='secondary' sx={{ fontSize: 100 }} />
               </div>
-              <Button
-                variant="contained"
-                sx={{ mt: 3, mb: 2, width:"100%" }}
-                onClick={()=>{
-                  setMainView(MainView.SHOW_SIMILAR);
-                }}
-              >
-                show similar diamonds
-              </Button>
+              <div className='PriceButtons'>
+                <Button
+                  variant="contained"
+                  sx={{ mb: 1, width: "90%" }}
+                  onClick={() => {
+                    setMainView(MainView.SHOW_SIMILAR);
+                  }}>
+                  show similar diamonds
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{ mb: 2, width: "90%" }}
+                  onClick={() => {
+                    setMainView(MainView.CALC_PRICE);
+                  }}>
+                  Re Estimate Price
+                </Button>
+              </div>
             </div>
           </Box>
         </div>
       }
       {
-        mainView === MainView.SHOW_SIMILAR && 
-        <ShowSimilarsPopup 
+        mainView === MainView.SHOW_SIMILAR &&
+        <ShowSimilarsPopup
           diamondId={submitiedDiamond.id}
+          onBackClick={() => {
+            setMainView(MainView.SHOW_PRICE)
+          }}
         />
       }
 
