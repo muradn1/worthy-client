@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import DiamondIcon from '@mui/icons-material/DiamondOutlined';
 import Box from '@mui/material/Box';
 import CalcPriceForm from './components/CalcPriceForm';
 import { Button } from '@mui/material';
+import ShowSimilarsPopup from './components/ShowSimilarsPopup';
 
 enum MainView {
   LOGO,
@@ -26,6 +27,12 @@ const LogoBoxStyle = {
 function App() {
   const [mainView, setMainView] = useState(MainView.LOGO);
   const [submitiedDiamond, setSubmitiedDiamond] = useState({ id: "", price: -1 });
+  const calcFormAfterSubmitCallback = useCallback(
+    (diamondId: string, price: number) => {
+      setSubmitiedDiamond({ id: diamondId, price })
+    },[]
+  )
+  
   useEffect(() => {
     setTimeout(() => {
       setMainView(MainView.CALC_PRICE);
@@ -50,9 +57,7 @@ function App() {
       }
       {mainView === MainView.CALC_PRICE &&
         <CalcPriceForm afterDone={
-          (diamondId: string, price: number) => {
-            setSubmitiedDiamond({ id: diamondId, price })
-          }
+          calcFormAfterSubmitCallback
         } />
       }
       {
@@ -80,7 +85,9 @@ function App() {
       }
       {
         mainView === MainView.SHOW_SIMILAR && 
-        <div>similar</div>
+        <ShowSimilarsPopup 
+          diamondId={submitiedDiamond.id}
+        />
       }
 
     </div>

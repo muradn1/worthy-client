@@ -40,7 +40,7 @@ export default function CalcPriceForm({ afterDone }: { afterDone: (diamondId: st
           const {id:diamondId, price} = mutationResult.calcDiamondPrice;
           afterDone(diamondId,price);
       }
-    }, [mutationResult])
+    }, [mutationResult,afterDone])
 
 
     if (loading) return <div>Submitting...</div>;
